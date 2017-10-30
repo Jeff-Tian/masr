@@ -1,6 +1,5 @@
 package Lfasr;
 
-
 import java.util.HashMap;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -23,46 +22,12 @@ public class Lfasr {
     // 等待时长（秒）
     private static int sleepSecond = 20;
 
-    public static void go() {
+    public static void convertAudioToText() throws LfasrException {
         // 加载配置文件
         PropertyConfigurator.configure("C:\\Users\\Jeff\\gs-rest-hateoas\\complete\\src\\source\\log4j.properties");
 
-        // 初始化LFASR实例
-        LfasrClientImp lc = null;
-        try {
-            lc = LfasrClientImp.initLfasrClient();
-        } catch (LfasrException e) {
-            // 初始化异常，解析异常描述信息
-            Message initMsg = JSON.parseObject(e.getMessage(), Message.class);
-            System.out.println("ecode=" + initMsg.getErr_no());
-            System.out.println("failed=" + initMsg.getFailed());
-        }
-
         // 获取上传任务ID
-        String task_id = "";
-        HashMap<String, String> params = new HashMap<>();
-        params.put("has_participle", "true");
-        try {
-            // 上传音频文件
-            Message uploadMsg = lc.lfasrUpload(local_file, type, params);
-
-            // 判断返回值
-            int ok = uploadMsg.getOk();
-            if (ok == 0) {
-                // 创建任务成功
-                task_id = uploadMsg.getData();
-                System.out.println("task_id=" + task_id);
-            } else {
-                // 创建任务失败-服务端异常
-                System.out.println("ecode=" + uploadMsg.getErr_no());
-                System.out.println("failed=" + uploadMsg.getFailed());
-            }
-        } catch (LfasrException e) {
-            // 上传异常，解析异常描述信息
-            Message uploadMsg = JSON.parseObject(e.getMessage(), Message.class);
-            System.out.println("ecode=" + uploadMsg.getErr_no());
-            System.out.println("failed=" + uploadMsg.getFailed());
-        }
+        String task_id = uploadAudio();
 
         // 循环等待音频处理结果
         while (true) {
@@ -72,9 +37,10 @@ public class Lfasr {
                 System.out.println("waiting ...");
             } catch (InterruptedException e) {
             }
+
             try {
                 // 获取处理进度
-                Message progressMsg = lc.lfasrGetProgress(task_id);
+                Message progressMsg = Lfasr.getLfasrClientImp().lfasrGetProgress(task_id);
 
                 // 如果返回状态不等于0，则任务失败
                 if (progressMsg.getOk() != 0) {
@@ -109,7 +75,7 @@ public class Lfasr {
 
         // 获取任务结果
         try {
-            Message resultMsg = lc.lfasrGetResult(task_id);
+            Message resultMsg = Lfasr.getLfasrClientImp().lfasrGetResult(task_id);
             System.out.println(resultMsg.getData());
             // 如果返回状态等于0，则任务处理成功
             if (resultMsg.getOk() == 0) {
@@ -125,6 +91,56 @@ public class Lfasr {
             Message resultMsg = JSON.parseObject(e.getMessage(), Message.class);
             System.out.println("ecode=" + resultMsg.getErr_no());
             System.out.println("failed=" + resultMsg.getFailed());
+        }
+    }
+
+    private static String uploadAudio() throws LfasrException {
+        String task_id = "";
+        HashMap<String, String> params = new HashMap<>();
+        params.put("has_participle", "true");
+        try {
+            // 上传音频文件
+            Message uploadMsg = Lfasr.getLfasrClientImp().lfasrUpload(local_file, type, params);
+
+            // 判断返回值
+            int ok = uploadMsg.getOk();
+            if (ok == 0) {
+                // 创建任务成功
+                task_id = uploadMsg.getData();
+                System.out.println("task_id=" + task_id);
+            } else {
+                // 创建任务失败-服务端异常
+                System.out.println("ecode=" + uploadMsg.getErr_no());
+                System.out.println("failed=" + uploadMsg.getFailed());
+            }
+
+            return task_id;
+        } catch (LfasrException e) {
+            // 上传异常，解析异常描述信息
+            Message uploadMsg = JSON.parseObject(e.getMessage(), Message.class);
+            System.out.println("ecode=" + uploadMsg.getErr_no());
+            System.out.println("failed=" + uploadMsg.getFailed());
+            throw e;
+        }
+    }
+
+    private static LfasrClientImp client = null;
+
+    private static LfasrClientImp getLfasrClientImp() throws LfasrException {
+        if (client != null) {
+            return client;
+        }
+
+        try {
+            client = LfasrClientImp.initLfasrClient();
+            return client;
+        } catch (LfasrException e) {
+            // 初始化异常，解析异常描述信息
+            Message message = JSON.parseObject(e.getMessage(), Message.class);
+            System.out.println("ecode=" + message.getErr_no());
+            System.out.println("failed=" + message.getFailed());
+
+            throw e;
         }
     }
 }

@@ -19,7 +19,7 @@ public class GreetingController {
     public HttpEntity<Greeting> greeting(
             @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 
-        Lfasr.go();
+        Lfasr.convertAudioToText();
         Greeting greeting = new Greeting(String.format(TEMPLATE, name));
         greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
 
