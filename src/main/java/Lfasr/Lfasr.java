@@ -20,9 +20,9 @@ public class Lfasr {
     // 等待时长（秒）
     private static int sleepSecond = 20;
 
-    public static String convertAudioToText(String local_file) {
+    public static Message convertAudioToText(String local_file) {
         // 加载配置文件
-        PropertyConfigurator.configure("C:\\Users\\Jeff\\gs-rest-hateoas\\complete\\src\\source\\log4j.properties");
+        PropertyConfigurator.configure("..\\log4j.properties");
 
         try {
             // 获取上传任务ID
@@ -34,7 +34,7 @@ public class Lfasr {
             // 获取任务结果
             return getTaskResult(task_id);
         } catch (LfasrException ex) {
-            return ex.getMessage();
+            return JSON.parseObject(ex.getMessage(), Message.class);
         }
     }
 
@@ -90,7 +90,7 @@ public class Lfasr {
         System.out.println("waiting ...");
     }
 
-    private static String getTaskResult(String task_id) {
+    private static Message getTaskResult(String task_id) {
         try {
             Message resultMsg = Lfasr.getLfasrClientImp().lfasrGetResult(task_id);
             System.out.println(resultMsg.getData());
@@ -104,14 +104,14 @@ public class Lfasr {
                 System.out.println("failed=" + resultMsg.getFailed());
             }
 
-            return resultMsg.getData();
+            return resultMsg;
         } catch (LfasrException e) {
             // 获取结果异常处理，解析异常描述信息
             Message resultMsg = JSON.parseObject(e.getMessage(), Message.class);
             System.out.println("ecode=" + resultMsg.getErr_no());
             System.out.println("failed=" + resultMsg.getFailed());
 
-            return resultMsg.getData();
+            return resultMsg;
         }
     }
 

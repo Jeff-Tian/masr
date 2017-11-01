@@ -1,19 +1,20 @@
 package hello;
 
+import com.iflytek.msp.cpdb.lfasr.model.Message;
 import org.springframework.hateoas.ResourceSupport;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AsrResult extends ResourceSupport {
-    private final String content;
+    private final Message content;
 
     @JsonCreator
-    public AsrResult(@JsonProperty("content") String content) {
+    public AsrResult(@JsonProperty("content") Message content) {
         this.content = content;
     }
 
-    public String getContent() {
+    public Message getContent() {
         return content;
     }
 }
