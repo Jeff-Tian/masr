@@ -16,14 +16,10 @@ public class GreetingController {
     private static final String TEMPLATE = "Hello, %s!";
 
     @RequestMapping("/greeting")
-    public HttpEntity<Greeting> greeting(
+    public HttpEntity<String> greeting(
             @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 
-        Lfasr.convertAudioToText();
-        Greeting greeting = new Greeting(String.format(TEMPLATE, name));
-        greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
-
-        return new ResponseEntity<Greeting>(greeting, HttpStatus.OK);
+        return new ResponseEntity<String>(Lfasr.convertAudioToText(), HttpStatus.OK);
     }
 
 

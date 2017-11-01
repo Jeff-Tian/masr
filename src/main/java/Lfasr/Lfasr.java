@@ -22,23 +22,30 @@ public class Lfasr {
     // 等待时长（秒）
     private static int sleepSecond = 20;
 
-    public static void convertAudioToText() throws LfasrException {
+    public static String convertAudioToText() {
         // 加载配置文件
         PropertyConfigurator.configure("C:\\Users\\Jeff\\gs-rest-hateoas\\complete\\src\\source\\log4j.properties");
 
-        // 获取上传任务ID
-        String task_id = uploadAudio();
+        try {
+            // 获取上传任务ID
+            String task_id = uploadAudio();
 
-        // 循环等待音频处理结果
-        while (true) {
-            try {
-                // 睡眠1min。另外一个方案是让用户尝试多次获取，第一次假设等1分钟，获取成功后break；失败的话增加到2分钟再获取，获取成功后break；再失败的话加到4分钟；8分钟；……
-                Thread.sleep(sleepSecond * 1000);
-                System.out.println("waiting ...");
-            } catch (InterruptedException e) {
-            }
+            // 循环等待音频处理结果
+            poolTaskProgress(task_id);
 
-            try {
+            // 获取任务结果
+            return getTaskResult(task_id);
+        } catch (LfasrException ex) {
+            return JSON.parseObject(ex.getMessage(), Message.class).getData();
+        }
+    }
+
+    private static void poolTaskProgress(String task_id) {
+
+        try {
+            while (true) {
+                sleep();
+
                 // 获取处理进度
                 Message progressMsg = Lfasr.getLfasrClientImp().lfasrGetProgress(task_id);
 
@@ -65,15 +72,27 @@ public class Lfasr {
                         continue;
                     }
                 }
-            } catch (LfasrException e) {
-                // 获取进度异常处理，根据返回信息排查问题后，再次进行获取
-                Message progressMsg = JSON.parseObject(e.getMessage(), Message.class);
-                System.out.println("ecode=" + progressMsg.getErr_no());
-                System.out.println("failed=" + progressMsg.getFailed());
             }
-        }
 
-        // 获取任务结果
+
+        } catch (InterruptedException e) {
+
+
+        } catch (LfasrException e) {
+            // 获取进度异常处理，根据返回信息排查问题后，再次进行获取
+            Message progressMsg = JSON.parseObject(e.getMessage(), Message.class);
+            System.out.println("ecode=" + progressMsg.getErr_no());
+            System.out.println("failed=" + progressMsg.getFailed());
+        }
+    }
+
+    private static void sleep() throws InterruptedException {
+        // 睡眠1min。另外一个方案是让用户尝试多次获取，第一次假设等1分钟，获取成功后break；失败的话增加到2分钟再获取，获取成功后break；再失败的话加到4分钟；8分钟；……
+        Thread.sleep(sleepSecond * 1000);
+        System.out.println("waiting ...");
+    }
+
+    private static String getTaskResult(String task_id) {
         try {
             Message resultMsg = Lfasr.getLfasrClientImp().lfasrGetResult(task_id);
             System.out.println(resultMsg.getData());
@@ -86,11 +105,15 @@ public class Lfasr {
                 System.out.println("ecode=" + resultMsg.getErr_no());
                 System.out.println("failed=" + resultMsg.getFailed());
             }
+
+            return resultMsg.getData();
         } catch (LfasrException e) {
             // 获取结果异常处理，解析异常描述信息
             Message resultMsg = JSON.parseObject(e.getMessage(), Message.class);
             System.out.println("ecode=" + resultMsg.getErr_no());
             System.out.println("failed=" + resultMsg.getFailed());
+
+            return resultMsg.getData();
         }
     }
 
