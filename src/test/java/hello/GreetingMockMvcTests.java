@@ -37,7 +37,7 @@ public class GreetingMockMvcTests {
 
     @Test
     public void envEndpointNotHidden() throws Exception {
-        mockMvc.perform(get("/greeting"))
+        mockMvc.perform(get("/asr"))
             .andExpect(jsonPath("$.content").value("Hello, World!"));
     }
 }

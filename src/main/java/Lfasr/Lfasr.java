@@ -12,8 +12,6 @@ import com.iflytek.msp.cpdb.lfasr.model.ProgressStatus;
 
 public class Lfasr {
 
-    // 原始音频存放地址
-    private static final String local_file = "C:\\Users\\Jeff\\Pictures\\Untitled.wav";
     /*
      * 转写类型选择：标准版和电话版分别为：
      * LfasrType.LFASR_STANDARD_RECORDED_AUDIO 和 LfasrType.LFASR_TELEPHONY_RECORDED_AUDIO
@@ -22,13 +20,13 @@ public class Lfasr {
     // 等待时长（秒）
     private static int sleepSecond = 20;
 
-    public static String convertAudioToText() {
+    public static String convertAudioToText(String local_file) {
         // 加载配置文件
         PropertyConfigurator.configure("C:\\Users\\Jeff\\gs-rest-hateoas\\complete\\src\\source\\log4j.properties");
 
         try {
             // 获取上传任务ID
-            String task_id = uploadAudio();
+            String task_id = uploadAudio(local_file);
 
             // 循环等待音频处理结果
             poolTaskProgress(task_id);
@@ -36,7 +34,7 @@ public class Lfasr {
             // 获取任务结果
             return getTaskResult(task_id);
         } catch (LfasrException ex) {
-            return JSON.parseObject(ex.getMessage(), Message.class).getData();
+            return ex.getMessage();
         }
     }
 
@@ -117,7 +115,7 @@ public class Lfasr {
         }
     }
 
-    private static String uploadAudio() throws LfasrException {
+    private static String uploadAudio(String local_file) throws LfasrException {
         String task_id = "";
         HashMap<String, String> params = new HashMap<>();
         params.put("has_participle", "true");

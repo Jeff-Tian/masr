@@ -11,16 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import Lfasr.Lfasr;
 
 @RestController
-public class GreetingController {
+public class AsrController {
 
-    private static final String TEMPLATE = "Hello, %s!";
+    @RequestMapping("/asr")
+    public HttpEntity<AsrResult> asr(
+            @RequestParam(value = "audioFile", required = true) String audioFile) {
 
-    @RequestMapping("/greeting")
-    public HttpEntity<String> greeting(
-            @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
+        AsrResult asrResult = new AsrResult(Lfasr.convertAudioToText(audioFile));
+        asrResult.add(linkTo(methodOn(AsrController.class).asr(audioFile)).withSelfRel());
 
-        return new ResponseEntity<String>(Lfasr.convertAudioToText(), HttpStatus.OK);
+        return new ResponseEntity<AsrResult>(asrResult, HttpStatus.OK);
     }
-
-
 }
