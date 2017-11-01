@@ -31,15 +31,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class GreetingTraversonIntegrationTests {
+public class HealthCheckTraversonIntegrationTests {
 
     @LocalServerPort
     private int port;
 
     @Test
     public void envEndpointNotHidden() throws Exception {
-        Traverson traverson = new Traverson(new URI("http://localhost:" + this.port + "/asr"), MediaTypes.HAL_JSON);
-        String greeting = traverson.follow("self").toObject("$.content");
-        assertThat(greeting).isEqualTo("Hello, World!");
+        Traverson traverson = new Traverson(new URI("http://localhost:" + this.port + "/healthcheck"), MediaTypes.HAL_JSON);
+        String healthcheck = traverson.follow("self").toObject("$.result");
+        assertThat(healthcheck).isEqualTo("everything is ok");
     }
 }

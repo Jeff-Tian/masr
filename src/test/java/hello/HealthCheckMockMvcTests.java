@@ -30,14 +30,14 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GreetingMockMvcTests {
+public class HealthCheckMockMvcTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void envEndpointNotHidden() throws Exception {
-        mockMvc.perform(get("/asr"))
-            .andExpect(jsonPath("$.content").value("Hello, World!"));
+        mockMvc.perform(get("/healthcheck"))
+                .andExpect(jsonPath("$.result").value("everything is ok"));
     }
 }
