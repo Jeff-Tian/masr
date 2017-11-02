@@ -13,8 +13,8 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 jar {
-    baseName = 'gs-rest-hateoas'
-    version =  '0.1.0'
+    baseName = 'masr'
+    version = '0.1.0'
 }
 
 repositories {
@@ -28,5 +28,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-hateoas")
     testCompile("com.jayway.jsonpath:json-path")
     testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    compile files('lib/fastjson-1.2.39.jar')
+    compile files('lib/lfasr-sdk-client-2.0.0.1005-jar-with-dependencies.jar')
+    compile files('lib/log4j-1.2.17.jar')
 }
 
