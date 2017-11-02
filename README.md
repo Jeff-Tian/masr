@@ -3,10 +3,15 @@ masr - More than Automatic Speech Recognition
 
 build:
 ```
-gradlew build
+gradlew clean build
 ```
 
 run:
 ```
 java -jar ./build/libs/masr-xxx.jar
+```
+
+deploy:
+```
+https://www.tianmaying.com/tutorial/deploy-spring-boot-application
 ```
