@@ -1,6 +1,6 @@
 ﻿#!/bin/sh
 SERVICE_NAME=masr-service
-PATH_TO_JAR=/home/vertica/masr/masr-0.1.0.jar
+PATH_TO_JAR=$2
 PID_PATH_NAME=/tmp/masr-pid
 case $1 in
     start)
