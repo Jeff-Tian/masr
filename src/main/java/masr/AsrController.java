@@ -1,4 +1,4 @@
-package hello;
+package masr;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 

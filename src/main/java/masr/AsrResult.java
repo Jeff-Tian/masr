@@ -1,4 +1,4 @@
-package hello;
+package masr;
 
 import com.iflytek.msp.cpdb.lfasr.model.Message;
 import org.springframework.hateoas.ResourceSupport;
