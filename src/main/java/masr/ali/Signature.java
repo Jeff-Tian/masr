@@ -13,8 +13,8 @@ import java.util.Locale;
 import java.util.SimpleTimeZone;
 
 public class Signature {
-    public static String sign(String method, String accept, String body, String contentType, String path, String secret) {
-        String s = getStringToSign(method, accept, body, contentType, new Date(), path);
+    public static String sign(String method, String accept, String body, String contentType, Date date, String path, String secret) {
+        String s = getStringToSign(method, accept, body, contentType, date, path);
 
         return HMACSha1(s, secret);
     }

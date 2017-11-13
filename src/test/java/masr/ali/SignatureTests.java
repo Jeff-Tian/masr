@@ -36,6 +36,7 @@ public class SignatureTests {
 
     @Test
     public void testSign() {
-        assertEquals("8GhPDIExOo8NNTFdHNCetp+5DBQ=", Signature.sign("POST", "application/json", "", "application/json", "/face/attribute", "xxx"));
+        Date date = new Date(2017, 10, 9);
+        assertEquals("O7j1uIVg9mH59hmJSP1dingSBYg=", Signature.sign("POST", "application/json", "", "application/json", date, "/face/attribute", "xxx"));
     }
 }
