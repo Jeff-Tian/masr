@@ -22,7 +22,7 @@ public class Lfasr {
 
     public static Message convertAudioToText(String local_file) {
         // 加载配置文件
-        PropertyConfigurator.configure("..\\log4j.properties");
+        PropertyConfigurator.configure("..\\resources\\log4j.properties");
 
         try {
             // 获取上传任务ID

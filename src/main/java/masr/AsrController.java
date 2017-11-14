@@ -20,6 +20,7 @@ public class AsrController {
         AsrResult asrResult = new AsrResult(Lfasr.convertAudioToText(audioFile));
         asrResult.add(linkTo(methodOn(AsrController.class).asr(audioFile)).withSelfRel());
 
+        //http://www.xfyun.cn/doccenter/lfasr#go_operate_guid
         return new ResponseEntity<AsrResult>(asrResult, HttpStatus.OK);
     }
 }

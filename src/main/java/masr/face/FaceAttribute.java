@@ -13,12 +13,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Date;
 
-public class SmileDetector {
-    public static JSONObject detect(String imagePath) throws JSONException {
+public class FaceAttribute {
+    public static JSONObject detect(String base64ImageContent) throws JSONException {
         JSONObject json = new JSONObject();
 
         json.put("type", "1");
-        json.put("content", imagePath);
+        json.put("content", base64ImageContent);
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
