@@ -13,4 +13,14 @@ public class JSONConverter {
 
         return res;
     }
+
+    public static String[] convertJSONArrayToStringArray(JSONArray jsonArray) throws JSONException {
+        String[] res = new String[jsonArray.length()];
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            res[i] = (String) jsonArray.get(i);
+        }
+
+        return res;
+    }
 }

@@ -1,13 +1,16 @@
 package masr.face;
 
 import masr.common.ImageHelper;
+import masr.common.JSONConverter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class FaceBehavior implements Serializable {
     private final Boolean smile;
@@ -24,11 +27,19 @@ public class FaceBehavior implements Serializable {
         this.photoSize = photoSize;
     }
 
-    public static FaceBehavior detectFromImage(String base64ImageContent) throws JSONException {
+    public static FaceBehavior detectFromImage(String base64ImageContent) throws JSONException, IOException {
         JSONObject json = FaceAttribute.detect(base64ImageContent);
 
+        System.out.println("FaceAttribute Result = " + json);
+
         JSONArray face_rect = (JSONArray) json.get("face_rect");
-        return new FaceBehavior(json.get("expression") == "1", (Integer) json.get("face_num"), FaceBehavior.computeFaceArea(face_rect), FaceBehavior.computeFacePosition(face_rect), new int[]{0, 0});
+        System.out.println("Expression = " + json.get("expression"));
+        int[] expression = JSONConverter.convertJSONArrayToIntegerArray((JSONArray) json.get("expression"));
+        int faceNumber = (int) json.get("face_num");
+
+        int[] photoSize = ImageHelper.getImageSizeFromBase64String(base64ImageContent);
+
+        return new FaceBehavior(Arrays.equals(expression, new int[]{1}), faceNumber, FaceBehavior.computeFaceArea(face_rect), FaceBehavior.computeFacePosition(face_rect), photoSize);
     }
 
     public static FaceBehavior fromAliFaceAttribute(JSONObject attr, String base64Image) throws JSONException, IOException {
@@ -58,5 +69,17 @@ public class FaceBehavior implements Serializable {
 
     public int[] getPhotoSize() {
         return photoSize;
+    }
+
+    public float[] getFacePosition() {
+        return facePosition;
+    }
+
+    public double getFaceAreaRatio() {
+        if (this.getPhotoSize()[0] > 0 && this.getPhotoSize()[1] > 0) {
+            return this.getFaceArea() / (this.getPhotoSize()[0] * this.getPhotoSize()[1]);
+        }
+
+        return 0;
     }
 }
