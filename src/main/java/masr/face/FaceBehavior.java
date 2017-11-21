@@ -8,9 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class FaceBehavior implements Serializable {
     private final Boolean smile;

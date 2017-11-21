@@ -28,3 +28,13 @@ then
 ```
 deploy.ps1
 ```
+
+https://unix.stackexchange.com/questions/27054/bin-bash-no-such-file-or-directory
+
+If met the unrecognize command error, try the solution:
+```
+vi <your_file>
+:set ff=unix
+:set nobomb
+:wq
+```
