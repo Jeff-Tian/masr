@@ -14,7 +14,7 @@ apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'masr'
-    version = '0.1.0'
+    version = '0.1.1'
 }
 
 repositories {
@@ -29,8 +29,28 @@ dependencies {
     testCompile("com.jayway.jsonpath:json-path")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
-    compile files('lib/fastjson-1.2.39.jar')
+    compile files('lib/cglib-nodep-2.2.jar')
+    compile files('lib/kxml2-min-2.3.0.jar')
+    compile files('lib/commons-io-2.6.jar')
     compile files('lib/lfasr-sdk-client-2.0.0.1005-jar-with-dependencies.jar')
+    compile files('lib/dom4j-1.6.1.jar')
     compile files('lib/log4j-1.2.17.jar')
+    compile files('lib/fastjson-1.2.39.jar')
+    compile files('lib/org.json.jar')
+    compile files('lib/java-json.jar')
+    compile files('lib/stax-1.2.0.jar')
+    compile files('lib/jcodec-0.2.2.jar')
+    compile files('lib/stax-api-1.0.1.jar')
+    compile files('lib/jcodec-javase-0.2.2.jar')
+    compile files('lib/wstx-asl-3.2.7.jar')
+    compile files('lib/jdom-1.1.3.jar')
+    compile files('lib/xmlpull-1.1.3.1.jar')
+    compile files('lib/jdom2-2.0.5.jar')
+    compile files('lib/xom-1.1.jar')
+    compile files('lib/jettison-1.2.jar')
+    compile files('lib/xpp3_min-1.1.4c.jar')
+    compile files('lib/joda-time-1.6.jar')
+    compile files('lib/xstream-1.4.10.jar')
+    compile files('lib/kxml2-2.3.0.jar')
 }
 

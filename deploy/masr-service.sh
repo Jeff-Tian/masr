@@ -1,4 +1,4 @@
-﻿#!/bin/sh
+#!/bin/sh
 SERVICE_NAME=masr-service
 PATH_TO_JAR=$2
 PID_PATH_NAME=/tmp/masr-pid
