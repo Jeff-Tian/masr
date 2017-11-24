@@ -25,6 +25,10 @@ public class FaceBehavior implements Serializable {
         this.photoSize = photoSize;
     }
 
+    public static FaceBehavior empty() {
+        return new FaceBehavior(false, 0, 0, new float[]{0, 0}, new int[]{0, 0});
+    }
+
     public static FaceBehavior detectFromImage(String base64ImageContent) throws JSONException, IOException {
         JSONObject json = FaceAttribute.detect(base64ImageContent);
 

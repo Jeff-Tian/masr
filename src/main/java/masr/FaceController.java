@@ -1,5 +1,6 @@
 package masr;
 
+import masr.common.ImageHelper;
 import masr.common.JSONConverter;
 import masr.face.FaceBehavior;
 import masr.face.FaceBehaviorAggregator;
@@ -20,10 +21,32 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 public class FaceController {
+    @RequestMapping(value = "/face_behavior_from_files", method = RequestMethod.POST)
+    public HttpEntity<FaceResult> faceBehaviorFromFiles(@RequestBody(required = true) Map<String, Object> data) throws Exception {
+        Object[] a = Arrays.stream(((ArrayList) data.get("photos")).toArray()).map(p -> {
+            try {
+                String base64 = ImageHelper.convertToBase64FromPath(p.toString());
+
+                return FaceBehavior.detectFromImage(base64);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return FaceBehavior.empty();
+        }).toArray();
+
+        FaceResult fr = getFaceResult(a);
+
+        fr.add(linkTo(methodOn(FaceController.class).faceBehaviorFromFiles(data)).withSelfRel());
+
+        return new ResponseEntity<FaceResult>(fr, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/face_behavior", method = RequestMethod.POST)
     public HttpEntity<FaceResult> faceBehavior(@RequestBody(required = true) Map<String, Object> data) throws Exception {
         Object[] a = Arrays.stream(((ArrayList) data.get("photos")).toArray()).map(p -> {
-            System.out.println("Get Image: " + p);
             try {
                 return FaceBehavior.detectFromImage((String) p);
             } catch (JSONException e) {
@@ -32,19 +55,24 @@ public class FaceController {
                 e.printStackTrace();
             }
 
-            return new FaceBehavior(false, 0, 0, new float[]{0, 0}, new int[]{0, 0});
+            return FaceBehavior.empty();
         }).toArray();
 
+        FaceResult faceResult = getFaceResult(a);
+
+        faceResult.add(linkTo(methodOn(FaceController.class).faceBehavior(data)).withSelfRel());
+
+        return new ResponseEntity<FaceResult>(faceResult, HttpStatus.OK);
+    }
+
+    private FaceResult getFaceResult(Object[] a) throws Exception {
         FaceBehavior[] b = new FaceBehavior[a.length];
 
         for (int i = 0; i < a.length; i++) {
             b[i] = (FaceBehavior) a[i];
         }
 
-        FaceResult faceResult = new FaceResult(FaceBehaviorAggregator.from(b));
-
-        faceResult.add(linkTo(methodOn(FaceController.class).faceBehavior(data)).withSelfRel());
-
-        return new ResponseEntity<FaceResult>(faceResult, HttpStatus.OK);
+        return new FaceResult(FaceBehaviorAggregator.from(b));
     }
+
 }
