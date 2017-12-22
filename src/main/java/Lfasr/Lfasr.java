@@ -74,8 +74,8 @@ public class Lfasr {
 
 
         } catch (InterruptedException e) {
-
-
+            System.out.println("出错了！");
+            System.out.println(e.getStackTrace());
         } catch (LfasrException e) {
             // 获取进度异常处理，根据返回信息排查问题后，再次进行获取
             Message progressMsg = JSON.parseObject(e.getMessage(), Message.class);
