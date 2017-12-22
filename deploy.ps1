@@ -41,4 +41,4 @@ ssh $target.ssh_host $cmd
 
 scp ./build/libs/masr-0.1.3.jar ./deploy/masr-service.sh $target.scp_target
 
-ssh $target.ssh_host "pwd && ls " $target.working_dir  " && cd "  $target.working_dir  "&& chmod +x masr-service.sh && ./masr-service.sh stop && ./masr-service.sh start masr-0.1.3.jar && sleep 5 && curl localhost:12444/healthcheck"
+ssh $target.ssh_host "pwd && ls " $target.working_dir  " && cd "  $target.working_dir  "&& chmod +x masr-service.sh && ./masr-service.sh stop && ./masr-service.sh start masr-0.1.3.jar && sleep 8 && curl localhost:12444/healthcheck"
