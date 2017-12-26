@@ -2,17 +2,25 @@ package masr.idempotency;
 
 import com.iflytek.msp.cpdb.lfasr.model.Message;
 import masr.common.FileHelper;
+import redis.clients.jedis.Jedis;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 public class AudioToText {
-    public static Message convert(String filePath) {
-//        String hash = FileHelper.getHash(filePath);
-//        if (storage[hash] == null) {
-//            Message message = Lfasr.Lfasr.convertAudioToText(filePath);
-//
-//            storage[hash] = message;
-//        }
-//
-//        return storage[hash];
-        return null;
+    public static String convert(String filePath) throws IOException, NoSuchAlgorithmException {
+        Jedis jedis = new Jedis(Objects.equals(System.getenv("NODE_ENV"), "prd") ? "live.redis.server" : "uat.redis.server");
+        String hash = FileHelper.getHash(filePath);
+        String cache = jedis.get(hash);
+
+        if (cache == null) {
+            Message message = Lfasr.Lfasr.convertAudioToText(filePath);
+
+            cache = String.valueOf(message);
+            jedis.set(hash, cache);
+        }
+
+        return cache;
     }
 }

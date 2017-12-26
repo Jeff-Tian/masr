@@ -52,5 +52,6 @@ dependencies {
     compile files('lib/joda-time-1.6.jar')
     compile files('lib/xstream-1.4.10.jar')
     compile files('lib/kxml2-2.3.0.jar')
+    compile files('lib/jedis-2.9.0.jar')
 }
 
