@@ -1,14 +1,17 @@
 package masr.common;
 
+import org.jcodec.api.JCodecException;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
 public class VideoHelperTest {
     @Test
     public void grabScreenshots() throws Exception {
-        Object[] res = VideoHelper.grabScreenshots("C:\\Users\\Jeff\\Pictures\\My Movie.mp4", 10);
-        assertArrayEquals(new Object[]{
+        String[] res = VideoHelper.grabScreenshots("C:\\Users\\Jeff\\Pictures\\My Movie.mp4", 10);
+        assertArrayEquals(new String[]{
                 "C:\\Users\\Jeff\\Pictures\\My Movie\\cap_57.jpg",
                 "C:\\Users\\Jeff\\Pictures\\My Movie\\cap_115.jpg",
                 "C:\\Users\\Jeff\\Pictures\\My Movie\\cap_173.jpg",
@@ -21,5 +24,4 @@ public class VideoHelperTest {
                 "C:\\Users\\Jeff\\Pictures\\My Movie\\cap_579.jpg"
         }, res);
     }
-
 }

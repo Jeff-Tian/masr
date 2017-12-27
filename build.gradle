@@ -14,7 +14,7 @@ apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'masr'
-    version = '0.1.3'
+    version = '0.1.4'
 }
 
 repositories {
@@ -53,5 +53,6 @@ dependencies {
     compile files('lib/xstream-1.4.10.jar')
     compile files('lib/kxml2-2.3.0.jar')
     compile files('lib/jedis-2.9.0.jar')
+
 }
 

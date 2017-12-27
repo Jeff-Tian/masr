@@ -19,8 +19,7 @@ https://www.tianmaying.com/tutorial/deploy-spring-boot-application
 Open powershell with administrator 
 ```
 set-ExecutionPolicy RemoteSigned
-```
-or 
+```or 
 ```
 set-ExecutionPolicy Unrestricted 
 ```
