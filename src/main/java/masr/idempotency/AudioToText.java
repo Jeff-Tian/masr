@@ -12,7 +12,7 @@ import java.util.Objects;
 public class AudioToText {
     public static String convert(String filePath) throws IOException, NoSuchAlgorithmException {
         Jedis jedis = new Jedis(Objects.equals(System.getenv("NODE_ENV"), "prd") ? "live.redis.server" : "uat.redis.server");
-        String hash = FileHelper.getHash(filePath);
+        String hash = "asr_" + FileHelper.getHash(filePath);
         String cache = jedis.get(hash);
 
         if (cache == null) {

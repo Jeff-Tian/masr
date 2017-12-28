@@ -17,13 +17,9 @@ import java.security.NoSuchAlgorithmException;
 public class AsrController {
 
     @RequestMapping("/asr")
-    public HttpEntity<AsrResult> asr(
+    public HttpEntity<String> asr(
             @RequestParam(value = "audioFile", required = true) String audioFile) throws IOException, NoSuchAlgorithmException {
 
-        AsrResult asrResult = new AsrResult(AudioToText.convert(audioFile));
-        asrResult.add(linkTo(methodOn(AsrController.class).asr(audioFile)).withSelfRel());
-
-        //http://www.xfyun.cn/doccenter/lfasr#go_operate_guid
-        return new ResponseEntity<AsrResult>(asrResult, HttpStatus.OK);
+        return new ResponseEntity<String>(AudioToText.convert(audioFile), HttpStatus.OK);
     }
 }

@@ -39,6 +39,6 @@ $cmd = "mkdir -p " + $target.working_dir + "  && ls"
 $cmd
 ssh $target.ssh_host $cmd
 
-scp ./build/libs/masr-0.1.4.jar ./deploy/masr-service.sh $target.scp_target
+scp ./build/libs/masr-0.1.6.jar ./deploy/masr-service.sh $target.scp_target
 
-ssh $target.ssh_host "pwd && ls " $target.working_dir  " && cd "  $target.working_dir  "&& chmod +x masr-service.sh && ./masr-service.sh stop && ./masr-service.sh start masr-0.1.4.jar && sleep 20 && tail masr.out && curl localhost:12444/healthcheck"
+ssh $target.ssh_host "pwd && ls " $target.working_dir  " && cd "  $target.working_dir  "&& chmod +x masr-service.sh && ./masr-service.sh stop && ./masr-service.sh start masr-0.1.6.jar && sleep 20 && tail masr.out && curl localhost:12444/healthcheck"
